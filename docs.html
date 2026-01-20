@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRI Metadata - Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* MUI Dark Theme Color Palette */
+        :root {
+            --mui-palette-background-default: #121212;
+            --mui-palette-background-paper: #1e1e1e;
+            --mui-palette-background-elevated: #2d2d2d;
+            --mui-palette-primary-main: #90caf9;
+            --mui-palette-primary-light: #e3f2fd;
+            --mui-palette-primary-dark: #42a5f5;
+            --mui-palette-secondary-main: #ce93d8;
+            --mui-palette-success-main: #66bb6a;
+            --mui-palette-warning-main: #ffa726;
+            --mui-palette-error-main: #f44336;
+            --mui-palette-info-main: #29b6f6;
+            --mui-palette-text-primary: rgba(255, 255, 255, 0.87);
+            --mui-palette-text-secondary: rgba(255, 255, 255, 0.6);
+            --mui-palette-text-disabled: rgba(255, 255, 255, 0.38);
+            --mui-palette-divider: rgba(255, 255, 255, 0.12);
+            --mui-palette-action-hover: rgba(255, 255, 255, 0.08);
+            --mui-palette-action-selected: rgba(255, 255, 255, 0.16);
+            --mui-palette-action-focus: rgba(255, 255, 255, 0.12);
+            /* Legacy variables */
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-tertiary: #2d2d2d;
+            --bg-card: #1e1e1e;
+            --accent-cyan: #90caf9;
+            --accent-purple: #ce93d8;
+            --accent-orange: #ffa726;
+            --accent-green: #66bb6a;
+            --accent-yellow: #ffee58;
+            --text-primary: rgba(255, 255, 255, 0.87);
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-muted: rgba(255, 255, 255, 0.38);
+            --border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: 0.00938em;
+            background: var(--mui-palette-background-default);
+            color: var(--mui-palette-text-primary);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
+        /* MUI Drawer/Sidebar */
+        .sidebar {
+            background: var(--mui-palette-background-paper);
+            border-right: 1px solid var(--mui-palette-divider);
+            padding: 16px 8px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px 16px 16px;
+            margin-bottom: 8px;
+        }
+
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--mui-palette-text-primary);
+            letter-spacing: 0.15px;
+        }
+
+        .nav-section {
+            margin-bottom: 16px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08333em;
+            color: var(--mui-palette-text-secondary);
+            margin-bottom: 8px;
+            padding: 0 16px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 8px 16px;
+            min-height: 40px;
+            color: var(--mui-palette-text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 2px;
+            transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover {
+            background: var(--mui-palette-action-hover);
+            color: var(--mui-palette-text-primary);
+        }
+
+        .nav-link.active {
+            background: rgba(144, 202, 249, 0.16);
+            color: var(--mui-palette-primary-main);
+        }
+
+        /* MUI List Navigation */
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 16px;
+            padding: 0 8px;
+        }
+
+        .nav-item-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-menu-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 8px 16px;
+            min-height: 48px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--mui-palette-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-menu-link:hover {
+            background: var(--mui-palette-action-hover);
+            color: var(--mui-palette-text-primary);
+        }
+
+        .nav-menu-link.active {
+            background: rgba(144, 202, 249, 0.16);
+            color: var(--mui-palette-primary-main);
+        }
+
+        .nav-menu-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            color: inherit;
+        }
+
+        .nav-menu-link.active .nav-menu-icon {
+            color: var(--mui-palette-primary-main);
+        }
+
+        /* Collapsible Nav Items */
+        .nav-menu-link .nav-arrow {
+            margin-left: auto;
+            font-size: 18px;
+            transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--mui-palette-text-disabled);
+        }
+
+        .nav-item-group.expanded .nav-menu-link .nav-arrow {
+            transform: rotate(90deg);
+        }
+
+        /* Material Icons base styling */
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .nav-submenu {
+            display: none;
+            flex-direction: column;
+            margin-top: 4px;
+            padding-left: 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item-group.expanded .nav-submenu {
+            display: flex;
+            max-height: 800px;
+        }
+
+        .nav-submenu-link {
+            display: block;
+            padding: 8px 16px;
+            min-height: 36px;
+            color: var(--mui-palette-text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 8px;
+            transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-submenu-link:hover {
+            background: var(--mui-palette-action-hover);
+            color: var(--mui-palette-text-primary);
+        }
+
+        .nav-submenu-link.active {
+            background: rgba(144, 202, 249, 0.08);
+            color: var(--mui-palette-primary-main);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 48px 64px;
+            max-width: 900px;
+        }
+
+        .page-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-top: 48px;
+            margin-bottom: 20px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-purple);
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+
+        h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-orange);
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        li strong {
+            color: var(--text-primary);
+        }
+
+        .info-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+
+        .info-box.accent {
+            border-left: 4px solid var(--accent-cyan);
+        }
+
+        .metadata-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .metadata-item h5 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .metadata-item h5 .number {
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .metadata-item p {
+            margin-bottom: 10px;
+        }
+
+        .metadata-item .examples {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-tertiary);
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-tertiary);
+            color: var(--accent-green);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .example-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .example-card h4 {
+            margin-top: 0;
+            color: var(--accent-purple);
+        }
+
+        .example-card .situation {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .example-card .situation strong {
+            color: var(--accent-cyan);
+        }
+
+        .example-card .transcript {
+            font-style: italic;
+            color: var(--accent-yellow);
+            background: rgba(234, 179, 8, 0.1);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-yellow);
+            margin: 16px 0;
+        }
+
+        .ticket {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .ticket h5 {
+            color: var(--accent-orange);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .ticket ul {
+            margin-left: 0;
+            list-style: none;
+        }
+
+        .ticket li {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .ticket li strong {
+            color: var(--text-primary);
+            min-width: 140px;
+        }
+
+        .ticket li code {
+            color: var(--accent-green);
+        }
+
+        .processing-note {
+            font-style: italic;
+            color: var(--accent-cyan);
+            text-align: center;
+            padding: 16px;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .intent-section {
+            border-left: 3px solid var(--accent-purple);
+            padding-left: 20px;
+            margin: 20px 0;
+        }
+
+        .intent-section h5 {
+            color: var(--accent-purple);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .intent-examples {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .intent-examples li {
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .intent-examples li em {
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 900px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="HMND Logo.png" alt="HMND Logo" class="logo-img">
+                <span class="logo-text">HRI Virtual Simulation</span>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-item-group" id="visualiserGroup">
+                    <a href="index.html" class="nav-menu-link" id="visualiserLink">
+                        <span>Visualiser</span>
+                        <span class="nav-arrow material-icons">chevron_right</span>
+                    </a>
+                </div>
+                <div class="nav-item-group expanded" id="docsGroup">
+                    <a href="#" class="nav-menu-link active" id="docsLink">
+                        <span>Documentation</span>
+                        <span class="nav-arrow material-icons">chevron_right</span>
+                    </a>
+                    <div class="nav-submenu">
+                        <a href="#introduction" class="nav-submenu-link">Introduction</a>
+                        <a href="#assumptions" class="nav-submenu-link">Assumptions</a>
+                        <a href="#universal" class="nav-submenu-link">Part 1: Universal Metadata</a>
+                        <a href="#specific" class="nav-submenu-link">Part 2: Interaction Specific</a>
+                        <a href="#examples" class="nav-submenu-link">Part 3: Worked Examples</a>
+                        <a href="#example1" class="nav-submenu-link" style="padding-left: 32px;">Example 1: Delicate Request</a>
+                        <a href="#example2" class="nav-submenu-link" style="padding-left: 32px;">Example 2: Conditional Chore</a>
+                        <a href="#example3" class="nav-submenu-link" style="padding-left: 32px;">Example 3: Privacy Boundary</a>
+                        <a href="#example4" class="nav-submenu-link" style="padding-left: 32px;">Example 4: Clarification Loop</a>
+                        <a href="#example5" class="nav-submenu-link" style="padding-left: 32px;">Example 5: Collaborative Lift</a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="page-title" id="introduction">HRI Metadata Documentation</h1>
+            <p class="page-subtitle">Home Robot Interaction Metadata - Data Structure and Step by Step Robot Thinking Process</p>
+
+            <div class="info-box accent">
+                <p>This documentation describes the data structure and step by step robot thinking process behind every human-robot interaction. It provides a framework for understanding how a home robot processes, categorizes, and responds to human interactions.</p>
+            </div>
+
+            <h2 id="assumptions">Assumptions & Constraints</h2>
+            
+            <ul>
+                <li>This documentation focuses on the <strong>home environment</strong>. The interaction should be relevant to our service, robot skills.</li>
+                <li>Current voice interaction experiences (Siri, Gemini VA) are not viable as primary communication methods. Voice interaction was implemented as an "add-on" modality rather than being designed from the ground up.</li>
+                <li>To imagine the right modality we must understand the data structure we are envisioning.</li>
+                <li>Robots don't have brains but we can create narrow intelligence. The spec/template of the data structure documentation will allow us to create interaction demos via AI tools.</li>
+                <li>The safety watchdog runs in one level higher hierarchy.</li>
+            </ul>
+
+            <h2 id="universal">Part 1: Universal Interaction Metadata</h2>
+            
+            <p>The "live interaction context data structure" of the robot. These metrics measure or classify an interaction before or at the moment it begins.</p>
+
+            <div class="info-box">
+                <p><strong>Design Goals:</strong></p>
+                <ul>
+                    <li>Sufficiently expressive to capture all possible interaction types</li>
+                    <li>Immutable structure - we don't need to change it at run time</li>
+                    <li>Data type for each item is human readable, natural language and numbers</li>
+                </ul>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">1</span> Confidence</h5>
+                <p>Are we definitely beginning to interact?</p>
+                <div class="examples">Examples: low, medium, high</div>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">2</span> Urgency</h5>
+                <p>What's the initial evaluation of the interaction? Do we have to stop or drop everything, or react quickly?</p>
+                <div class="examples">Examples: emergency, immediate, high priority, medium, back of the queue</div>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">3</span> Previous State</h5>
+                <p>What state was the robot in immediately before this interaction began?</p>
+                <div class="examples">Examples: idle, washing dishes, ironing shirts</div>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">4</span> Interaction Initiator</h5>
+                <p>Who or what initiates this interaction? Then we can ask, what is the reason?</p>
+                <div class="examples">Examples: human, robot, external trigger/cloud</div>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">5</span> Communication Proximity</h5>
+                <p>Sliding scale from zero (face to face) to maximum communication range. Includes local vs. remote/teleoperation.</p>
+                <div class="examples">Examples: very close, 2m away, 10m away, phone call, video call, remote trigger</div>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">6</span> Modality (Communication Medium)</h5>
+                <p>What modalities did the human or robot choose to initiate this interaction? What subtleties can the robot detect?</p>
+                <div class="examples">Examples: voice, touch screen, remote control app, gesture</div>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">7</span> Existing Relationships / Role / Social Contract</h5>
+                <p>Defines the relationship dynamic between human and robot.</p>
+                <div class="examples">Examples: Supervisor/Subordinate, Team mate, Service provider/Client, Teacher/Learner, Client/Assistant</div>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">8</span> Formality (Implicit vs. Explicit)</h5>
+                <p>Why has this scale or level of formality been used? What is the underlying question or assumption?</p>
+                <div class="examples">
+                    <strong>Implicit:</strong> Subtle nudges, hints (e.g., looking at a bottle of milk = put it in the fridge)<br>
+                    <strong>Explicit:</strong> Direct, clear instructions (e.g., "Put the figs in the fridge")
+                </div>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">9</span> Shared World Knowledge (General Intuition)</h5>
+                <p>General world knowledge shared by most adults (e.g., "Cups go in cupboards").</p>
+                <div class="examples">Examples: very high, unknown, low, child-like</div>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">10</span> Specific World Knowledge (Contextual Intuition)</h5>
+                <p>Knowledge specific to a certain environment (e.g., "The blue cup lives in <em>this</em> specific cupboard").</p>
+                <div class="examples">Examples: very high, partial, none</div>
+            </div>
+
+            <div class="metadata-item">
+                <h5><span class="number">11</span> Person Specific Knowledge or Preferences</h5>
+                <p>What specific knowledge or preferences do we know about this user that we should bring to mind as a priority?</p>
+                <div class="examples">Examples: unknown person, blind person, deaf person, wheelchair user, user must finish morning coffee before speaking</div>
+            </div>
+
+            <h2 id="specific">Part 2: Interaction Specific Metadata</h2>
+
+            <p>Interaction specific metadata isn't universal—it must be a pick-and-choose tag list to populate based on inputs, sensors, context, etc.</p>
+
+            <div class="info-box">
+                <p><strong>Success Criteria for Interaction Metadata:</strong></p>
+                <ul>
+                    <li><strong>Composability:</strong> Multiple metadata types can coexist in a single interaction</li>
+                    <li><strong>Ambiguity:</strong> Explicitly capture what is unknown, triggering clarification loops</li>
+                    <li><strong>Constraint Definition:</strong> Capture negative instructions ("Don't wake the baby")</li>
+                    <li><strong>Grounding:</strong> Nouns/locations must link to world model</li>
+                    <li><strong>Informative:</strong> Metadata must add clarity beyond raw transcript</li>
+                    <li><strong>Temporality:</strong> Distinguish immediate actions, scheduled tasks, conditional triggers</li>
+                    <li><strong>Verifiability:</strong> Define what "finished" looks like</li>
+                    <li><strong>Persistency:</strong> Does this matter only now, or is it permanent?</li>
+                    <li><strong>Safety Boundary:</strong> Does this require a dedicated safety check?</li>
+                    <li><strong>Interruptibility:</strong> Can this be paused, or must it complete atomically?</li>
+                </ul>
+            </div>
+
+            <h3>A. Core Intent (The "Why")</h3>
+            <p><em>Classifies the primary driver of the interaction.</em></p>
+
+            <div class="intent-section">
+                <h5>Action_Physical</h5>
+                <p>Requires motor movement, manipulation, or navigation.</p>
+                <div class="intent-examples">
+                    <ul>
+                        <li>H → R: "My hands are covered in flour. Could you please scratch my nose?"</li>
+                        <li>H → R: "Could you please help me move the sofa to the other wall?"</li>
+                        <li>H → R: "Pick up the t-shirt."</li>
+                        <li>R → H: "A courier is at the door requiring a signature."</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="intent-section">
+                <h5>Action_Digital</h5>
+                <p>Requires software action, sensor adjustment, or data transmission.</p>
+                <div class="intent-examples">
+                    <ul>
+                        <li>H → R: "I am having a private conversation now. Please disable your microphones and cameras..."</li>
+                        <li>R → H: "I have a critical firmware update available that requires a system restart."</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="intent-section">
+                <h5>Inquiry_Fact</h5>
+                <p>User is asking for existing knowledge or logs; or Robot is checking facts.</p>
+                <div class="intent-examples">
+                    <ul>
+                        <li>"I can't find my wallet. Can you check your visual logs to see where I last placed it?"</li>
+                        <li>"Do we have enough ingredients to make lasagna for six people?"</li>
+                        <li>"The indoor temperature has risen to 26°C. Do you want me to lower the blinds?"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="intent-section">
+                <h5>Inquiry_Clarification</h5>
+                <p>Resolving unknown data or confirming intent before acting.</p>
+                <div class="intent-examples">
+                    <ul>
+                        <li>"I am unable to identify this object left on the floor. Could you please confirm if it is trash to be discarded or a toy to be put away?"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="intent-section">
+                <h5>Social_Interaction</h5>
+                <p>Social glue, greetings, or emotive acknowledgments without task content.</p>
+                <div class="intent-examples">
+                    <ul>
+                        <li>"Good Morning Robot!"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="intent-section">
+                <h5>State_Declaration</h5>
+                <p>Stating a new fact or updating the state of the world.</p>
+                <div class="intent-examples">
+                    <ul>
+                        <li>"The milk is in the fridge."</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>B. Target & Grounding (The "What" & "Where")</h3>
+            <p><em>Links the intent to specific items or locations in the World Model.</em></p>
+
+            <ul>
+                <li><strong>Target_Object:</strong> ID of the specific item (e.g., <code>Mug_04</code>, <code>Unknown_Red_Item</code>)</li>
+                <li><strong>Target_Location:</strong> Coordinate, Semantic Room, or Relative Location (e.g., "hallway closet", "living room")</li>
+                <li><strong>Ambiguity_Flag:</strong> TRUE/FALSE. If True, robot must trigger a clarification loop before proceeding.</li>
+            </ul>
+
+            <h3>C. Temporal Scope (The "When")</h3>
+            <p><em>Distinguishes between immediate actions, scheduled tasks, and conditional triggers.</em></p>
+
+            <ul>
+                <li><strong>Execution_Timing:</strong> <code>Immediate</code>, <code>Queued</code>, <code>Scheduled</code>, or <code>Conditional</code></li>
+                <li><strong>Duration_Constraint:</strong> <code>Until_Done</code>, <code>For_X_Minutes</code>, or <code>While_User_Is_Here</code></li>
+            </ul>
+
+            <h3>D. Operational Constraints (The "How")</h3>
+            <p><em>Defines the style, safety boundaries, and privacy limits of the execution.</em></p>
+
+            <ul>
+                <li><strong>Safety_Level:</strong> <code>Standard</code>, <code>Critical</code> (requires confirmation), or <code>Passive</code></li>
+                <li><strong>Privacy_Mode:</strong> <code>Public</code> (normal) or <code>Private</code> (no recording/logs)</li>
+                <li><strong>Force_Profile:</strong> <code>Standard</code>, <code>Delicate</code> (precision required), or <code>Rigid</code> (high torque)</li>
+                <li><strong>Acoustic_Profile:</strong> <code>Normal</code>, <code>Whisper</code>, or <code>Loud</code></li>
+            </ul>
+
+            <h3>E. Memory & Learning (The "Legacy")</h3>
+            <p><em>Determines if this interaction updates the permanent user model or is transient.</em></p>
+
+            <ul>
+                <li><strong>Knowledge_Commit:</strong> <code>None</code> (Transient), <code>Short_Term</code> (Session only), or <code>Long_Term</code> (Permanent User Profile)</li>
+            </ul>
+
+            <h2 id="examples">Part 3: Worked Examples</h2>
+
+            <p>To visualize the step by step robot thinking process, we track the metadata state at two distinct moments:</p>
+
+            <div class="info-box">
+                <ol>
+                    <li><strong>T-0 (The "Empty Ticket"):</strong> The moment the robot detects a trigger. Universal Metadata is initialized with "Best Guesses." Specific metadata is null.</li>
+                    <li><strong>T-1 (The "Populated Ticket"):</strong> The Black Box has processed the inputs. Universal Metadata is refined, and Specific Metadata is fully populated.</li>
+                </ol>
+            </div>
+
+            <div class="example-card" id="example1">
+                <h4>Example 1: The "Delicate" Request (High Trust)</h4>
+                
+                <div class="situation">
+                    <strong>Situation:</strong> The user is in the kitchen, hands covered in flour. They lean in towards the robot with a desperate look.
+                </div>
+                
+                <div class="transcript">
+                    "My hands are covered in flour. Could you please scratch my nose?"
+                </div>
+
+                <div class="ticket">
+                    <h5>T-0: The Empty Ticket (Universal Guess)</h5>
+                    <ul>
+                        <li><strong>Confidence:</strong> <code>Medium</code> (User proximity detected, intent unclear)</li>
+                        <li><strong>Urgency:</strong> <code>Medium</code> (User looks distressed)</li>
+                        <li><strong>Initiator:</strong> <code>Human</code></li>
+                        <li><strong>Proximity:</strong> <code>Very Close</code> (&lt; 0.5m)</li>
+                        <li><strong>Role:</strong> <code>Assistant</code></li>
+                        <li><strong>Formality:</strong> <code>Implicit</code> (Guessing based on body language)</li>
+                    </ul>
+                </div>
+
+                <div class="processing-note">
+                    Processing... [Black Box extracts intent from "covered in flour" + "scratch nose"]
+                </div>
+
+                <div class="ticket">
+                    <h5>T-1: The Populated Ticket</h5>
+                    <ul>
+                        <li><strong>Urgency (Updated):</strong> <code>Immediate</code> (Physical discomfort)</li>
+                        <li><strong>Formality (Updated):</strong> <code>Explicit</code> (Direct request made)</li>
+                        <li><strong>A. Core Intent:</strong> <code>Action_Physical</code></li>
+                        <li><strong>B. Target:</strong> <code>User_Nose</code>, <code>User_Face</code></li>
+                        <li><strong>C. Temporal:</strong> <code>Execution: Immediate</code></li>
+                        <li><strong>D. Safety_Level:</strong> <code>Critical</code> (Operating near eyes/face)</li>
+                        <li><strong>D. Force_Profile:</strong> <code>Delicate</code> (Precision required, &lt; 0.5N force)</li>
+                        <li><strong>E. Memory:</strong> <code>None</code> (Transient interaction)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="example-card" id="example2">
+                <h4>Example 2: The "Conditional" Chore (Planning)</h4>
+                
+                <div class="situation">
+                    <strong>Situation:</strong> A dinner party is starting in an hour. The user is frantically tidying up and shouts a command while walking past the robot.
+                </div>
+                
+                <div class="transcript">
+                    "When the guests arrive, please take their coats and hang them in the hallway closet."
+                </div>
+
+                <div class="ticket">
+                    <h5>T-0: The Empty Ticket (Universal Guess)</h5>
+                    <ul>
+                        <li><strong>Confidence:</strong> <code>High</code> (Clear voice detection)</li>
+                        <li><strong>Urgency:</strong> <code>High</code> (User is rushing)</li>
+                        <li><strong>Initiator:</strong> <code>Human</code></li>
+                        <li><strong>Proximity:</strong> <code>2m</code> (Passing by)</li>
+                        <li><strong>Role:</strong> <code>Service Provider</code></li>
+                        <li><strong>Shared World Knowledge:</strong> <code>High</code></li>
+                    </ul>
+                </div>
+
+                <div class="processing-note">
+                    Processing... [Black Box detects "When X, do Y" structure]
+                </div>
+
+                <div class="ticket">
+                    <h5>T-1: The Populated Ticket</h5>
+                    <ul>
+                        <li><strong>Urgency (Updated):</strong> <code>Medium</code> (Task itself is not immediate)</li>
+                        <li><strong>A. Core Intent:</strong> <code>Action_Physical</code></li>
+                        <li><strong>B. Target:</strong> <code>Guest_Coats</code>, <code>Hallway_Closet</code></li>
+                        <li><strong>C. Execution:</strong> <code>Conditional</code></li>
+                        <li><strong>C. Condition_Trigger:</strong> <code>"Guest_Arrival_Event"</code></li>
+                        <li><strong>D. Safety_Level:</strong> <code>Standard</code></li>
+                        <li><strong>D. Privacy_Mode:</strong> <code>Public</code></li>
+                        <li><strong>E. Memory:</strong> <code>Short_Term</code> (Active only for this evening)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="example-card" id="example3">
+                <h4>Example 3: The "Privacy" Boundary (Negative Constraint)</h4>
+                
+                <div class="situation">
+                    <strong>Situation:</strong> The user receives a sensitive phone call. The robot is currently vacuuming nearby.
+                </div>
+                
+                <div class="transcript">
+                    "I am having a private conversation now. Please disable your microphones and cameras and go to the dock."
+                </div>
+
+                <div class="ticket">
+                    <h5>T-0: The Empty Ticket (Universal Guess)</h5>
+                    <ul>
+                        <li><strong>Confidence:</strong> <code>High</code></li>
+                        <li><strong>Urgency:</strong> <code>Low</code> (Robot assumes it is just cleaning)</li>
+                        <li><strong>Initiator:</strong> <code>Human</code></li>
+                        <li><strong>Previous State:</strong> <code>Vacuuming</code></li>
+                        <li><strong>Role:</strong> <code>Service Provider</code></li>
+                    </ul>
+                </div>
+
+                <div class="processing-note">
+                    Processing... [Black Box detects keywords "Private", "Disable", "Cameras"]
+                </div>
+
+                <div class="ticket">
+                    <h5>T-1: The Populated Ticket</h5>
+                    <ul>
+                        <li><strong>Urgency (Updated):</strong> <code>Emergency</code> (Immediate stop required to preserve trust)</li>
+                        <li><strong>Role (Updated):</strong> <code>Subordinate</code> (Strict obedience required)</li>
+                        <li><strong>A. Core Intent:</strong> <code>Action_Digital</code> + <code>Action_Physical</code></li>
+                        <li><strong>B. Target:</strong> <code>Self_Sensors</code>, <code>Charging_Dock</code></li>
+                        <li><strong>C. Temporal:</strong> <code>Execution: Immediate</code></li>
+                        <li><strong>D. Privacy_Mode:</strong> <code>Private</code> (No recording logs)</li>
+                        <li><strong>D. Acoustic_Profile:</strong> <code>Silent</code></li>
+                        <li><strong>E. Memory:</strong> <code>None</code> (Do not record this conversation)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="example-card" id="example4">
+                <h4>Example 4: The "Clarification" Loop (Ambiguity)</h4>
+                
+                <div class="situation">
+                    <strong>Situation:</strong> The robot is tidying the floor. It finds a crumpled piece of paper that looks like a child's drawing but is in the trash zone. The robot initiates the check.
+                </div>
+                
+                <div class="transcript">
+                    "I am unable to identify this object left on the floor. Could you please confirm if it is trash to be discarded or a toy to be put away?"
+                </div>
+
+                <div class="ticket">
+                    <h5>T-0: The Empty Ticket (Universal Guess)</h5>
+                    <ul>
+                        <li><strong>Confidence:</strong> <code>Low</code> (Robot is unsure of object classification)</li>
+                        <li><strong>Urgency:</strong> <code>Low</code></li>
+                        <li><strong>Initiator:</strong> <code>Robot</code> (Proactive maintenance)</li>
+                        <li><strong>Previous State:</strong> <code>Tidying</code></li>
+                        <li><strong>Role:</strong> <code>Assistant</code> (Agential)</li>
+                    </ul>
+                </div>
+
+                <div class="processing-note">
+                    Processing... [Black Box analyzes visual input vs. spatial context]
+                </div>
+
+                <div class="ticket">
+                    <h5>T-1: The Populated Ticket</h5>
+                    <ul>
+                        <li><strong>Shared World Knowledge (Updated):</strong> <code>Low</code> (Robot lacks context of this specific item)</li>
+                        <li><strong>A. Core Intent:</strong> <code>Inquiry_Clarification</code></li>
+                        <li><strong>B. Target:</strong> <code>Unknown_Object_ID_404</code></li>
+                        <li><strong>B. Ambiguity Flag:</strong> <code>TRUE</code></li>
+                        <li><strong>C. Temporal:</strong> <code>Execution: Immediate</code> (Wait for response)</li>
+                        <li><strong>E. Memory:</strong> <code>Long_Term</code> (If user says "That's my masterpiece," robot tags this object type as 'Art' forever)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="example-card" id="example5">
+                <h4>Example 5: The "Collaborative" Heavy Lift (Co-op)</h4>
+                
+                <div class="situation">
+                    <strong>Situation:</strong> The user is rearranging the living room. They stand at one end of a heavy sofa and look at the robot.
+                </div>
+                
+                <div class="transcript">
+                    "Could you please help me move the sofa to the other wall? I'll take the left side, you take the right."
+                </div>
+
+                <div class="ticket">
+                    <h5>T-0: The Empty Ticket (Universal Guess)</h5>
+                    <ul>
+                        <li><strong>Confidence:</strong> <code>High</code></li>
+                        <li><strong>Urgency:</strong> <code>Medium</code></li>
+                        <li><strong>Initiator:</strong> <code>Human</code></li>
+                        <li><strong>Modality:</strong> <code>Voice</code> + <code>Gesture</code> (User pointing to sofa end)</li>
+                        <li><strong>Role:</strong> <code>Service Provider</code></li>
+                    </ul>
+                </div>
+
+                <div class="processing-note">
+                    Processing... [Black Box analyzes "help me move", "left/right", "sofa"]
+                </div>
+
+                <div class="ticket">
+                    <h5>T-1: The Populated Ticket</h5>
+                    <ul>
+                        <li><strong>Role (Updated):</strong> <code>Team Mate</code> (Shift from servant to partner)</li>
+                        <li><strong>Proximity (Updated):</strong> <code>Sync_Required</code> (Must move at user's pace)</li>
+                        <li><strong>A. Core Intent:</strong> <code>Action_Physical</code></li>
+                        <li><strong>B. Target:</strong> <code>Object_Sofa</code>, <code>Location_Wall_Opposite</code></li>
+                        <li><strong>C. Duration:</strong> <code>Until_Done</code></li>
+                        <li><strong>D. Force_Profile:</strong> <code>Rigid</code> (High torque required)</li>
+                        <li><strong>D. Safety_Level:</strong> <code>Critical</code> (Collision avoidance with human partner)</li>
+                        <li><strong>E. Memory:</strong> <code>Short_Term</code></li>
+                    </ul>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Setup collapsible navigation
+        function setupNavToggle() {
+            const visualiserLink = document.getElementById('visualiserLink');
+            const docsLink = document.getElementById('docsLink');
+            const docsGroup = document.getElementById('docsGroup');
+
+            // Navigate to Visualiser page
+            visualiserLink.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+
+            // Toggle Documentation submenu
+            docsLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                docsGroup.classList.toggle('expanded');
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-submenu-link[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Highlight active section in navigation
+        const sections = document.querySelectorAll('h2[id], h4[id], .example-card[id]');
+        const navLinks = document.querySelectorAll('.nav-submenu-link[href^="#"]');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', setupNavToggle);
+    </script>
+</body>
+</html>

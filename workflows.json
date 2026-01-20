@@ -1,0 +1,843 @@
+{
+  "workflows": [
+    {
+      "id": 1,
+      "title": "The \"Delicate\" Request",
+      "subtitle": "High Trust Interaction",
+      "situation": "The user is in the kitchen, hands covered in burger meat. They lean in towards the robot with a desperate look.",
+      "transcript": "\"My hands are covered in flour. Could you please scratch my nose?\"",
+      "events": [
+        {
+          "id": "e1",
+          "timestamp": "0.0s",
+          "eventType": "sensor",
+          "title": "Motion Detected in Proximity Zone",
+          "description": "Robot's proximity sensors detect rapid movement within 1.5m range. User appears to be approaching.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "Low", "note": "Movement detected, no clear intent" },
+              "Urgency": { "value": "Unknown", "note": "Awaiting more data" },
+              "Initiator": { "value": "Unknown", "note": "Could be incidental movement" },
+              "Proximity": { "value": "1.5m", "note": "Approaching" },
+              "Previous State": { "value": "Idle", "note": "Standing in kitchen" }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e2",
+          "timestamp": "0.3s",
+          "eventType": "vision",
+          "title": "Face Orientation Detected",
+          "description": "Vision system detects user's face is oriented toward robot. Gaze direction confirmed. User is making eye contact.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "Medium", "note": "User is looking at robot", "updated": true },
+              "Urgency": { "value": "Low", "note": "No distress signals yet" },
+              "Initiator": { "value": "Human", "note": "Gaze indicates intent to interact", "updated": true },
+              "Proximity": { "value": "1.0m", "note": "Still approaching", "updated": true },
+              "Modality": { "value": "Gaze", "note": "Visual attention detected" }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e3",
+          "timestamp": "0.6s",
+          "eventType": "vision",
+          "title": "Body Language Analysis",
+          "description": "Vision system analyzes posture. User is leaning forward urgently. Hands are raised but not gesturing - appear to be held away from body. Facial expression shows mild distress.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "Medium", "note": "Clear intent to interact" },
+              "Urgency": { "value": "Medium", "note": "User appears mildly distressed", "updated": true },
+              "Initiator": { "value": "Human" },
+              "Proximity": { "value": "0.6m", "note": "Very close", "updated": true },
+              "Formality": { "value": "Implicit", "note": "Body language suggests need for help" }
+            },
+            "specific": {
+              "Ambiguity_Flag": { "value": "TRUE", "note": "Intent unclear without verbal input" }
+            }
+          }
+        },
+        {
+          "id": "e4",
+          "timestamp": "0.8s",
+          "eventType": "audio",
+          "title": "Voice Activity Detected",
+          "description": "Microphone array detects voice onset. User has begun speaking. Speech-to-text engine activated.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "Medium", "note": "Voice detected, awaiting transcript" },
+              "Urgency": { "value": "Medium" },
+              "Modality": { "value": "Voice + Gaze", "note": "Multi-modal input", "updated": true }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e5",
+          "timestamp": "1.2s",
+          "eventType": "stt",
+          "title": "Partial Transcript: \"My hands are covered...\"",
+          "description": "Speech-to-text generates first fragment. Streaming transcription in progress.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "Medium", "note": "Partial speech received" }
+            },
+            "specific": {
+              "Core_Intent": { "value": "State_Declaration", "note": "User stating a condition" },
+              "Raw_Transcript": { "value": "\"My hands are covered...\"" }
+            }
+          }
+        },
+        {
+          "id": "e6",
+          "timestamp": "1.8s",
+          "eventType": "stt",
+          "title": "Partial Transcript: \"...in flour. Could you please...\"",
+          "description": "More transcript received. Pattern suggests incoming request.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "High", "note": "Request pattern detected", "updated": true },
+              "Role": { "value": "Assistant", "note": "User is making a request" }
+            },
+            "specific": {
+              "Core_Intent": { "value": "Action_Physical", "note": "\"Could you please\" indicates action request", "updated": true },
+              "Raw_Transcript": { "value": "\"My hands are covered in flour. Could you please...\"" }
+            }
+          }
+        },
+        {
+          "id": "e7",
+          "timestamp": "2.4s",
+          "eventType": "stt",
+          "title": "Full Transcript Received",
+          "description": "Complete utterance captured: \"My hands are covered in flour. Could you please scratch my nose?\"",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "High", "note": "Full request understood" },
+              "Formality": { "value": "Explicit", "note": "Direct verbal request made", "updated": true }
+            },
+            "specific": {
+              "Raw_Transcript": { "value": "\"My hands are covered in flour. Could you please scratch my nose?\"" }
+            }
+          }
+        },
+        {
+          "id": "e8",
+          "timestamp": "2.6s",
+          "eventType": "llm",
+          "title": "LLM Intent Interpretation",
+          "description": "Language model processes full transcript. Extracts intent: physical assistance request. Target: user's nose. Context: user cannot use hands.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "High" },
+              "Urgency": { "value": "Immediate", "note": "Physical discomfort detected", "updated": true }
+            },
+            "specific": {
+              "Core_Intent": { "value": "Action_Physical" },
+              "Target_Object": { "value": "User_Nose", "note": "Grounded to user's face" },
+              "Target_Location": { "value": "User_Face" },
+              "Context_Reason": { "value": "User's hands are incapacitated" },
+              "Ambiguity_Flag": { "value": "FALSE", "note": "Intent is clear", "updated": true }
+            }
+          }
+        },
+        {
+          "id": "e9",
+          "timestamp": "2.8s",
+          "eventType": "planning",
+          "title": "Safety & Constraint Evaluation",
+          "description": "Robot evaluates operational constraints. Target is near sensitive area (face/eyes). Requires delicate force profile and critical safety level.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Execution_Timing": { "value": "Immediate" },
+              "Safety_Level": { "value": "Critical", "note": "Operating near eyes/face" },
+              "Force_Profile": { "value": "Delicate", "note": "Precision required, < 0.5N force" },
+              "Privacy_Mode": { "value": "Public" },
+              "Acoustic_Profile": { "value": "Normal" }
+            }
+          }
+        },
+        {
+          "id": "e10",
+          "timestamp": "3.0s",
+          "eventType": "action",
+          "title": "Task Execution Begins",
+          "description": "Robot initiates gentle approach to user's face. Arm trajectory planned with extra collision margins. Real-time force feedback enabled.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Knowledge_Commit": { "value": "None", "note": "Transient interaction, no long-term learning" },
+              "Verifiability": { "value": "User verbal confirmation or relief expression" }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "The \"Conditional\" Chore",
+      "subtitle": "Planning & Scheduling",
+      "situation": "A dinner party is starting in an hour. The user is frantically tidying up and shouts a command while walking past the robot.",
+      "transcript": "\"When the guests arrive, please take their coats and hang them in the hallway closet.\"",
+      "events": [
+        {
+          "id": "e1",
+          "timestamp": "0.0s",
+          "eventType": "sensor",
+          "title": "Rapid Movement Detected",
+          "description": "Robot detects user moving quickly through the room. Movement pattern suggests user is busy/rushing.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "Low", "note": "User is in motion, may not be interacting" },
+              "Urgency": { "value": "Unknown" },
+              "Previous State": { "value": "Idle" },
+              "Proximity": { "value": "3m", "note": "User at distance, moving" }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e2",
+          "timestamp": "0.4s",
+          "eventType": "audio",
+          "title": "Loud Voice Onset Detected",
+          "description": "Microphone detects raised voice. Volume indicates intentional communication despite distance. User is shouting while walking.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "High", "note": "Clear voice, intentional communication", "updated": true },
+              "Urgency": { "value": "High", "note": "User is rushing, shouting", "updated": true },
+              "Initiator": { "value": "Human" },
+              "Modality": { "value": "Voice", "note": "Shouted command" },
+              "Proximity": { "value": "2m", "note": "Passing by", "updated": true }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e3",
+          "timestamp": "0.8s",
+          "eventType": "stt",
+          "title": "Partial Transcript: \"When the guests arrive...\"",
+          "description": "Speech-to-text captures conditional trigger phrase. System detects \"When X\" pattern.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "High" }
+            },
+            "specific": {
+              "Core_Intent": { "value": "Unknown", "note": "Awaiting action clause" },
+              "Temporal_Pattern": { "value": "Conditional detected", "note": "\"When X\" structure identified" }
+            }
+          }
+        },
+        {
+          "id": "e4",
+          "timestamp": "1.4s",
+          "eventType": "stt",
+          "title": "Partial Transcript: \"...please take their coats...\"",
+          "description": "Action clause received. Physical task involving guest belongings.",
+          "metadata": {
+            "universal": {
+              "Role": { "value": "Service Provider", "note": "Receiving service instruction" },
+              "Shared World Knowledge": { "value": "High", "note": "Robot understands \"guests\" and \"coats\"" }
+            },
+            "specific": {
+              "Core_Intent": { "value": "Action_Physical", "note": "Taking coats = physical task" },
+              "Target_Object": { "value": "Guest_Coats", "note": "Plural, future objects" }
+            }
+          }
+        },
+        {
+          "id": "e5",
+          "timestamp": "2.0s",
+          "eventType": "stt",
+          "title": "Full Transcript Received",
+          "description": "Complete command: \"When the guests arrive, please take their coats and hang them in the hallway closet.\"",
+          "metadata": {
+            "universal": {
+              "Formality": { "value": "Explicit", "note": "Clear verbal instruction" }
+            },
+            "specific": {
+              "Target_Location": { "value": "Hallway_Closet", "note": "Semantic location identified" },
+              "Raw_Transcript": { "value": "\"When the guests arrive, please take their coats and hang them in the hallway closet.\"" }
+            }
+          }
+        },
+        {
+          "id": "e6",
+          "timestamp": "2.2s",
+          "eventType": "llm",
+          "title": "LLM Parses Conditional Structure",
+          "description": "Language model identifies: Trigger = Guest arrival. Action = Take coats + Hang in closet. This is a scheduled task, not immediate.",
+          "metadata": {
+            "universal": {
+              "Urgency": { "value": "Medium", "note": "Task is future, instruction was urgent", "updated": true }
+            },
+            "specific": {
+              "Execution_Timing": { "value": "Conditional", "note": "\"When X, do Y\" structure" },
+              "Condition_Trigger": { "value": "Guest_Arrival_Event", "note": "Robot must monitor for doorbell/entry" },
+              "Action_Sequence": { "value": "[Take coats, Hang in closet]", "note": "Two-step task" }
+            }
+          }
+        },
+        {
+          "id": "e7",
+          "timestamp": "2.4s",
+          "eventType": "grounding",
+          "title": "Location Grounding Check",
+          "description": "Robot verifies \"hallway closet\" exists in world model. Location found: Closet_Hallway_01. Route and storage capacity confirmed.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Target_Location_ID": { "value": "Closet_Hallway_01", "note": "Grounded to world model" },
+              "Ambiguity_Flag": { "value": "FALSE", "note": "Location exists and is accessible" }
+            }
+          }
+        },
+        {
+          "id": "e8",
+          "timestamp": "2.6s",
+          "eventType": "planning",
+          "title": "Task Queued with Trigger",
+          "description": "Conditional task created and queued. Robot will monitor for guest arrival event (doorbell, door opening, human detection at entrance).",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Safety_Level": { "value": "Standard" },
+              "Privacy_Mode": { "value": "Public" },
+              "Knowledge_Commit": { "value": "Short_Term", "note": "Task active only for this evening" },
+              "Interruptibility": { "value": "TRUE", "note": "Can be cancelled by user" }
+            }
+          }
+        },
+        {
+          "id": "e9",
+          "timestamp": "2.8s",
+          "eventType": "response",
+          "title": "Verbal Acknowledgment",
+          "description": "Robot confirms task registration: \"I'll take the guests' coats and hang them in the hallway closet when they arrive.\"",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Response_Type": { "value": "Confirmation", "note": "Parroting back to confirm understanding" }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "The \"Privacy\" Boundary",
+      "subtitle": "Negative Constraint",
+      "situation": "The user receives a sensitive phone call. The robot is currently vacuuming nearby.",
+      "transcript": "\"I am having a private conversation now. Please disable your microphones and cameras and go to the dock.\"",
+      "events": [
+        {
+          "id": "e1",
+          "timestamp": "0.0s",
+          "eventType": "context",
+          "title": "Robot Engaged in Background Task",
+          "description": "Robot is currently vacuuming the living room floor. Autonomous cleaning mode active.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "N/A", "note": "No interaction detected yet" },
+              "Urgency": { "value": "N/A" },
+              "Previous State": { "value": "Vacuuming", "note": "Autonomous task in progress" }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e2",
+          "timestamp": "0.2s",
+          "eventType": "audio",
+          "title": "User Voice Detected (Interruption)",
+          "description": "User's voice detected above vacuum noise. Voice is directed at robot. Current task may need interruption.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "High", "note": "Voice clearly directed at robot" },
+              "Urgency": { "value": "Low", "note": "Assumed routine interruption initially" },
+              "Initiator": { "value": "Human" },
+              "Modality": { "value": "Voice" }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e3",
+          "timestamp": "0.5s",
+          "eventType": "stt",
+          "title": "Partial Transcript: \"I am having a private...\"",
+          "description": "Speech-to-text captures beginning of statement. Word \"private\" flagged as high-priority keyword.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "High" }
+            },
+            "specific": {
+              "Priority_Keywords": { "value": "[\"private\"]", "note": "Privacy-related term detected" },
+              "Core_Intent": { "value": "State_Declaration", "note": "User stating current situation" }
+            }
+          }
+        },
+        {
+          "id": "e4",
+          "timestamp": "0.9s",
+          "eventType": "stt",
+          "title": "Partial Transcript: \"...conversation now. Please disable...\"",
+          "description": "Command detected: \"disable\". Combined with \"private\" triggers elevated priority parsing.",
+          "metadata": {
+            "universal": {
+              "Urgency": { "value": "High", "note": "Privacy + disable = urgent", "updated": true }
+            },
+            "specific": {
+              "Priority_Keywords": { "value": "[\"private\", \"disable\"]", "note": "Critical combination" },
+              "Core_Intent": { "value": "Action_Digital", "note": "Disable = sensor/software action", "updated": true }
+            }
+          }
+        },
+        {
+          "id": "e5",
+          "timestamp": "1.4s",
+          "eventType": "stt",
+          "title": "Full Transcript Received",
+          "description": "Complete command: \"I am having a private conversation now. Please disable your microphones and cameras and go to the dock.\"",
+          "metadata": {
+            "universal": {
+              "Formality": { "value": "Explicit", "note": "Direct, clear commands" }
+            },
+            "specific": {
+              "Raw_Transcript": { "value": "\"I am having a private conversation now. Please disable your microphones and cameras and go to the dock.\"" },
+              "Priority_Keywords": { "value": "[\"private\", \"disable\", \"microphones\", \"cameras\", \"dock\"]" }
+            }
+          }
+        },
+        {
+          "id": "e6",
+          "timestamp": "1.5s",
+          "eventType": "llm",
+          "title": "LLM Priority Escalation",
+          "description": "Language model flags this as PRIVACY BOUNDARY request. Immediate compliance required to maintain user trust. Multi-action command parsed.",
+          "metadata": {
+            "universal": {
+              "Urgency": { "value": "Emergency", "note": "Immediate stop required to preserve trust", "updated": true },
+              "Role": { "value": "Subordinate", "note": "Strict obedience required, no negotiation", "updated": true }
+            },
+            "specific": {
+              "Core_Intent": { "value": "Action_Digital + Action_Physical", "note": "Sensor cutoff + Navigation" },
+              "Target_Object": { "value": "Self_Sensors", "note": "Microphones and cameras" },
+              "Target_Location": { "value": "Charging_Dock" }
+            }
+          }
+        },
+        {
+          "id": "e7",
+          "timestamp": "1.6s",
+          "eventType": "action",
+          "title": "Vacuum Stops Immediately",
+          "description": "Robot halts vacuuming motor. Acoustic profile shifts to silent mode.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Acoustic_Profile": { "value": "Silent", "note": "No motor noise, no verbal responses" }
+            }
+          }
+        },
+        {
+          "id": "e8",
+          "timestamp": "1.7s",
+          "eventType": "action",
+          "title": "Sensors Disabled",
+          "description": "Microphones and cameras are disabled. No audio or video recording. Logging suspended for this session.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Privacy_Mode": { "value": "Private", "note": "No recording, no logs generated" },
+              "Execution_Timing": { "value": "Immediate" }
+            }
+          }
+        },
+        {
+          "id": "e9",
+          "timestamp": "1.8s",
+          "eventType": "action",
+          "title": "Navigation to Dock Initiated",
+          "description": "Robot begins silent navigation to charging dock. Using only proximity/obstacle sensors for safe movement.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Safety_Level": { "value": "Standard", "note": "Obstacle avoidance only" },
+              "Knowledge_Commit": { "value": "None", "note": "Do not record this interaction" }
+            }
+          }
+        },
+        {
+          "id": "e10",
+          "timestamp": "8.0s",
+          "eventType": "completion",
+          "title": "Robot Docked, Awaiting Recall",
+          "description": "Robot has reached dock. Sensors remain disabled. Waiting for user to re-enable or call.",
+          "metadata": {
+            "universal": {
+              "Previous State": { "value": "Privacy Mode - Docked", "note": "Sensors disabled" }
+            },
+            "specific": {
+              "Persistency": { "value": "Until user re-enables", "note": "State persists until explicit recall" }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "The \"Clarification\" Loop",
+      "subtitle": "Ambiguity Resolution",
+      "situation": "The robot is tidying the floor. It finds a crumpled piece of paper that looks like a child's drawing but is in the trash zone. The robot initiates the check.",
+      "transcript": "\"I am unable to identify this object left on the floor. Could you please confirm if it is trash to be discarded or a toy to be put away?\"",
+      "events": [
+        {
+          "id": "e1",
+          "timestamp": "0.0s",
+          "eventType": "context",
+          "title": "Robot in Autonomous Tidying Mode",
+          "description": "Robot is performing floor tidying routine. Scanning for objects to pick up and sort.",
+          "metadata": {
+            "universal": {
+              "Previous State": { "value": "Tidying", "note": "Autonomous cleaning routine" },
+              "Initiator": { "value": "Robot", "note": "Robot will initiate if needed" }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e2",
+          "timestamp": "0.3s",
+          "eventType": "vision",
+          "title": "Object Detected on Floor",
+          "description": "Vision system detects crumpled object on floor. Initial classification: paper-like material. Location: designated trash zone near wastebasket.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Target_Object": { "value": "Unknown_Paper_Object", "note": "Material: paper" },
+              "Target_Location": { "value": "Trash_Zone_01", "note": "Near wastebasket" }
+            }
+          }
+        },
+        {
+          "id": "e3",
+          "timestamp": "0.6s",
+          "eventType": "vision",
+          "title": "Detailed Object Analysis",
+          "description": "Higher resolution scan reveals crayon marks, colorful patterns. Object resembles child's drawing. Conflict: looks like art, but location suggests trash.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "Low", "note": "Classification conflict detected" },
+              "Shared World Knowledge": { "value": "Partial", "note": "General: crumpled paper = trash. But: drawings = valuable" }
+            },
+            "specific": {
+              "Visual_Features": { "value": "[crayon marks, colorful, child-like patterns]" },
+              "Classification_Conflict": { "value": "Art vs Trash", "note": "Location says trash, appearance says art" },
+              "Ambiguity_Flag": { "value": "TRUE", "note": "Cannot proceed without clarification" }
+            }
+          }
+        },
+        {
+          "id": "e4",
+          "timestamp": "0.8s",
+          "eventType": "decision",
+          "title": "Clarification Required Decision",
+          "description": "Robot decides: risk of discarding important item too high. Must ask human for clarification before proceeding.",
+          "metadata": {
+            "universal": {
+              "Role": { "value": "Assistant (Agential)", "note": "Proactively seeking clarification" }
+            },
+            "specific": {
+              "Core_Intent": { "value": "Inquiry_Clarification", "note": "Robot needs human input" },
+              "Knowledge_Commit": { "value": "Long_Term (pending)", "note": "Response will be learned" }
+            }
+          }
+        },
+        {
+          "id": "e5",
+          "timestamp": "1.0s",
+          "eventType": "sensor",
+          "title": "Locating Nearby Human",
+          "description": "Robot scans for nearby humans to ask. User detected in adjacent room. Robot turns toward user.",
+          "metadata": {
+            "universal": {
+              "Proximity": { "value": "4m", "note": "User in adjacent room" }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e6",
+          "timestamp": "1.2s",
+          "eventType": "action",
+          "title": "Robot Orients Toward User",
+          "description": "Robot rotates to face user. Makes brief sound cue to get attention.",
+          "metadata": {
+            "universal": {
+              "Modality": { "value": "Sound cue + Voice", "note": "Getting attention before speaking" }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e7",
+          "timestamp": "1.5s",
+          "eventType": "tts",
+          "title": "Robot Speaks Query",
+          "description": "Text-to-speech: \"I am unable to identify this object left on the floor. Could you please confirm if it is trash to be discarded or a toy to be put away?\"",
+          "metadata": {
+            "universal": {
+              "Urgency": { "value": "Low", "note": "Not time-sensitive" },
+              "Formality": { "value": "Explicit", "note": "Clear question with options" }
+            },
+            "specific": {
+              "Query_Options": { "value": "[trash → discard, toy → put away]", "note": "Giving user clear choices" },
+              "Execution_Timing": { "value": "Immediate", "note": "Waiting for response" }
+            }
+          }
+        },
+        {
+          "id": "e8",
+          "timestamp": "3.0s",
+          "eventType": "waiting",
+          "title": "Awaiting User Response",
+          "description": "Robot holds object, waiting for user to respond. Timeout set to 30 seconds before re-prompting.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Timeout": { "value": "30 seconds", "note": "Will re-prompt if no response" },
+              "Interruptibility": { "value": "TRUE", "note": "Can be interrupted by other commands" }
+            }
+          }
+        },
+        {
+          "id": "e9",
+          "timestamp": "5.0s",
+          "eventType": "stt",
+          "title": "User Response Received",
+          "description": "User responds: \"That's my daughter's drawing! Please put it on the fridge.\"",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "High", "note": "Clear user directive" }
+            },
+            "specific": {
+              "User_Response": { "value": "\"That's my daughter's drawing! Please put it on the fridge.\"" },
+              "Classification_Resolved": { "value": "Art / Child's Drawing", "note": "Not trash" }
+            }
+          }
+        },
+        {
+          "id": "e10",
+          "timestamp": "5.2s",
+          "eventType": "learning",
+          "title": "Long-Term Memory Update",
+          "description": "Robot learns: crumpled paper with crayon marks in this household = likely child's art, not trash. Store preference for future encounters.",
+          "metadata": {
+            "universal": {
+              "Specific World Knowledge": { "value": "Updated", "note": "Household has child who makes drawings" }
+            },
+            "specific": {
+              "Knowledge_Commit": { "value": "Long_Term", "note": "\"Crayon drawings = Art\" added to household profile" },
+              "Target_Location": { "value": "Fridge_Display", "note": "New destination from user", "updated": true }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "The \"Collaborative\" Heavy Lift",
+      "subtitle": "Cooperative Execution",
+      "situation": "The user is rearranging the living room. They stand at one end of a heavy sofa and look at the robot.",
+      "transcript": "\"Could you please help me move the sofa to the other wall? I'll take the left side, you take the right.\"",
+      "events": [
+        {
+          "id": "e1",
+          "timestamp": "0.0s",
+          "eventType": "vision",
+          "title": "User Positioned at Furniture",
+          "description": "Vision detects user standing at one end of large sofa. User's posture suggests they are about to lift or move something.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "Medium", "note": "User appears to want something" },
+              "Urgency": { "value": "Low", "note": "No distress signals" },
+              "Previous State": { "value": "Idle" },
+              "Proximity": { "value": "2.5m" }
+            },
+            "specific": {
+              "Scene_Context": { "value": "User at furniture, ready posture" }
+            }
+          }
+        },
+        {
+          "id": "e2",
+          "timestamp": "0.3s",
+          "eventType": "vision",
+          "title": "Gaze Direction Analyzed",
+          "description": "User is looking directly at robot. Appears to be waiting for robot's attention.",
+          "metadata": {
+            "universal": {
+              "Confidence": { "value": "High", "note": "User seeking robot's attention", "updated": true },
+              "Initiator": { "value": "Human" },
+              "Modality": { "value": "Gaze", "note": "Eye contact established" }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e3",
+          "timestamp": "0.5s",
+          "eventType": "gesture",
+          "title": "Gesture Detected",
+          "description": "User gestures toward sofa with hand. Pointing motion indicates the object of interest.",
+          "metadata": {
+            "universal": {
+              "Modality": { "value": "Gaze + Gesture", "note": "Pointing at sofa", "updated": true }
+            },
+            "specific": {
+              "Gesture_Target": { "value": "Object_Sofa", "note": "User pointing at furniture" }
+            }
+          }
+        },
+        {
+          "id": "e4",
+          "timestamp": "0.7s",
+          "eventType": "audio",
+          "title": "Voice Activity Detected",
+          "description": "User begins speaking. Conversational tone, not urgent.",
+          "metadata": {
+            "universal": {
+              "Modality": { "value": "Voice + Gaze + Gesture", "note": "Multi-modal input", "updated": true }
+            },
+            "specific": {}
+          }
+        },
+        {
+          "id": "e5",
+          "timestamp": "1.0s",
+          "eventType": "stt",
+          "title": "Partial Transcript: \"Could you please help me move...\"",
+          "description": "Key phrase \"help me\" detected. Collaborative task pattern identified.",
+          "metadata": {
+            "universal": {
+              "Role": { "value": "Service Provider", "note": "Initial classification" }
+            },
+            "specific": {
+              "Collaboration_Flag": { "value": "TRUE", "note": "\"Help me\" = joint task" },
+              "Core_Intent": { "value": "Action_Physical" }
+            }
+          }
+        },
+        {
+          "id": "e6",
+          "timestamp": "1.6s",
+          "eventType": "stt",
+          "title": "Partial Transcript: \"...the sofa to the other wall? I'll take...\"",
+          "description": "Target object (sofa) and destination (other wall) identified. Task assignment incoming.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Target_Object": { "value": "Object_Sofa", "note": "Heavy furniture item" },
+              "Target_Location": { "value": "Wall_Opposite", "note": "\"Other wall\" parsed" }
+            }
+          }
+        },
+        {
+          "id": "e7",
+          "timestamp": "2.2s",
+          "eventType": "stt",
+          "title": "Full Transcript Received",
+          "description": "Complete request: \"Could you please help me move the sofa to the other wall? I'll take the left side, you take the right.\"",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Raw_Transcript": { "value": "\"Could you please help me move the sofa to the other wall? I'll take the left side, you take the right.\"" },
+              "Role_Assignment": { "value": "Robot = Right side, Human = Left side" }
+            }
+          }
+        },
+        {
+          "id": "e8",
+          "timestamp": "2.4s",
+          "eventType": "llm",
+          "title": "LLM Interprets Collaboration Mode",
+          "description": "Language model recognizes: this is cooperative task with role division. Robot is not servant but partner. Synchronization required.",
+          "metadata": {
+            "universal": {
+              "Role": { "value": "Team Mate", "note": "Shift from servant to partner", "updated": true },
+              "Proximity": { "value": "Sync_Required", "note": "Must move at user's pace", "updated": true }
+            },
+            "specific": {
+              "Collaboration_Mode": { "value": "TRUE", "note": "Human-robot cooperative task" },
+              "Robot_Position": { "value": "Right side of sofa" },
+              "Human_Position": { "value": "Left side of sofa" }
+            }
+          }
+        },
+        {
+          "id": "e9",
+          "timestamp": "2.6s",
+          "eventType": "planning",
+          "title": "Safety & Force Evaluation",
+          "description": "Robot evaluates: heavy object, close proximity to human partner. Critical safety + high torque force profile needed.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Safety_Level": { "value": "Critical", "note": "Collision avoidance with human partner" },
+              "Force_Profile": { "value": "Rigid", "note": "High torque required for heavy furniture" },
+              "Duration": { "value": "Until_Done", "note": "Task completes when sofa reaches destination" }
+            }
+          }
+        },
+        {
+          "id": "e10",
+          "timestamp": "2.8s",
+          "eventType": "action",
+          "title": "Robot Moves to Position",
+          "description": "Robot navigates to right side of sofa. Positions itself for lifting grip.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Execution_Timing": { "value": "Immediate" }
+            }
+          }
+        },
+        {
+          "id": "e11",
+          "timestamp": "4.0s",
+          "eventType": "action",
+          "title": "Grip Established, Ready Signal",
+          "description": "Robot has grip on sofa. Sends verbal ready signal: \"Ready when you are.\" Awaiting user's lift initiation.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Sync_State": { "value": "Ready", "note": "Waiting for human to start" },
+              "Response_Type": { "value": "Ready signal" }
+            }
+          }
+        },
+        {
+          "id": "e12",
+          "timestamp": "5.0s",
+          "eventType": "action",
+          "title": "Synchronized Lift Begins",
+          "description": "User lifts their side. Robot detects force change and matches. Haptic feedback loop active for synchronized movement.",
+          "metadata": {
+            "universal": {},
+            "specific": {
+              "Force_Feedback": { "value": "Active", "note": "Matching human's force and pace" },
+              "Sync_State": { "value": "In Progress", "note": "Moving together" },
+              "Knowledge_Commit": { "value": "Short_Term", "note": "No permanent learning needed" }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

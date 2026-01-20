@@ -1,0 +1,339 @@
+HRI Design - Home Robot Interaction Metadata Documentation (live app)
+This live web app is an attempt to imagine and document the data structure and reasoning process behind every human robot interaction.
+
+
+Assumption/Constraints/Implications
+* This documentation focuses on the home environment. The interaction should be relevant to our service, robot skills. 
+* Current voice interaction experiences, such as Siri and Gemini VA, are not viable as primary communication methods. This is because their underlying information structures and content were not originally designed for voice with a physical robot; rather, voice interaction was implemented as an 'add-on' modality.
+* To imagine the right modality we must understand the data structure we are envisioning.
+* Robots don’t have brains but we can create narrow intelligence. The spec/template of the data structure documentation will allow us to create interaction demos via AI tool. Cursor opus is good enough to create this type of demo. FMS foundation, FMS agentic vision
+* The safety watch dog runs in one level higher hierarchy. 
+Part 1 - The High-Level Universal Interaction Metadata
+I want to call it the “live interaction context data structure” of the robot: These metrics measure or classify an interaction before or at the moment it begins. 
+
+
+Category/property is an interaction at the highest level and having correct information about what's going on. The high level interaction metadata purposefully doesn’t capture the meaning or intention, it is supposed to be more like a mental scaffold of everything the robot agent knows about the interaction, to standardise how it handles interactions.
+
+
+Success Criteria for a good design for the metadata at the highest level should be:
+* Sufficiently expressive to capture all possible interaction types
+* Immutable structure, we don’t need to change it at run time
+* The data type for each item is human readable, natural language and numbers
+
+
+High level categories for the data template that need populating each time, and updating / correcting as soon as more information becomes available:
+
+
+1. Confidence
+   * Examples: low confidence, medium, high
+   * Are we definitely beginning to interact?
+2. Urgency
+   * Examples: emergency, immediate, high priority, medium, back of the queue
+   * What’s the initial evaluation of the interaction? Do we have to stop or drop everything, or react quickly?
+3. Previous State
+   * Examples: idle, washing dishes, ironing shirts
+   * What state was the robot in immediately before this interaction began?
+4. Interaction Initiator
+   * Examples: human, robot, external trigger/cloud
+   * Who or what initiates this interaction?
+   * Then we can ask, what is the reason?
+5. Communication Proximity
+   * Examples: very close, 2m away, 10m away, phone call, video call, remote trigger by human
+   * Sufficiently expressive to cover a sliding scale from zero (face to face, right next to each other) to the maximum communication range. Includes local vs. remote/teleoperation.
+6. Modality (Communication Medium) 
+   * Examples: Voice, touch screen, remote control app, gesture
+   * What modalities did the human or robot choose to initiate this interaction? 
+   * What modalities are available? What subtleties can the robot detect?
+7. Existing relationships / Role / Social Contract
+   * Examples:
+      * Supervisor/Subordinate 
+      * Team mate (working together)
+      * Service provider/Client
+      * Teacher/Learner 
+      * Client/Assistant(Agential role)
+   * All of the above can be the other way around, which in reality sounds a bit weird: Robots are Clients and humans are assistants! 
+
+
+8. Formality (Implicit vs. Explicit)
+   * Examples:
+      * Implicit: Subtle nudges, hints, or shared styles (e.g., looking at a bottle of milk = put it in the fridge).
+      * Explicit: Direct, clear instructions (e.g., "Put the figs in the fridge").
+   * Why has this scale or level of formality been used? What is the underlying question or assumption? Is being quiet important, is there a baby sleeping, etc?
+
+
+9. Shared World Knowledge (General intuition) 
+   * Examples: very high, unknown, low, child like
+   * General world knowledge shared by most adults (e.g., "Cups go in cupboards"). We wouldn’t ask a two year old how to operate the washing machine.
+10. Specific World knowledge (Contextual Intuition)
+   * Examples: very high, partial, none
+   * Knowledge specific to a certain environment (e.g., "The blue cup lives in this specific cupboard").
+   * Some measure of the amount of general knowledge the person has. 
+   * Out of scope example: for instance some culture doesn’t have cups in the cupboard) 
+11. Person specific knowledge or preferences
+   * Examples: unknown person, blind person, deaf person, wheelchair user, user must finish their morning coffee before being able to speak
+   * What specific knowledge or preferences do we know about this user that we should bring to mind as a priority? Not just disabilities, but strong preferences or facts that are relevant to interactions
+
+
+Part 2 - Interaction Specific Metadata
+
+
+Interaction specific metadata isn’t universal, it must be a pick-and-choose tag list to take items from and populate based on the inputs, sensors, context, etc. 
+
+
+There is lots of incoming data that is being pre-processed for the LLM:
+
+
+* Streaming data from the cameras, microphones, that is processed by various models.
+   * This data is pre-processed, perhaps object or face recognition, or speech to text synthesis.
+* Other sensor data such as robot position, light levels, temperature, location in the map.
+
+
+For the sake of this demo we just treat the data pre-processing as a black box, and assume we have outputs ready for the LLM, like “Home Owner Recognised” from the face recognition and “blue cup is on the table” from object recognition. After the data is pre-processed it can be used to inform the human interaction or action the robot performs. 
+
+
+After pre-processing, adding metadata so we can correctly process or execute the instruction is the next step.
+
+
+The success criteria for the design of the interaction metadata is much more in depth than the universal categories. Perhaps we need to capture all of these attributes? Good metadata should capture:
+* Composability: The structure must allow for multiple metadata types to coexist in a single interaction (e.g., a command that also implies a question: "Put this away, and do we have more?").
+* Ambiguity: It must explicitly capture what is unknown. If a specific parameter (like a destination) is missing, the field should exist but be marked as unresolved, triggering a clarification loop.
+* Constraint Definition: It must capture negative instructions. "Don't wake the baby" is a constraint on speed and volume, not a separate task.
+* Grounding: Nouns or locations in the interaction data must somehow link to the world model or knowledge.
+* Informative: The metadata must add something - it must make the raw interaction data more clear, more actionable, more concise, etc. Otherwise you’d just store a transcript.
+* Temporality: It must distinguish between immediate actions, scheduled tasks, and conditional triggers ("when X happens").
+* Verifiability: The metadata must define what "finished" looks like. (e.g., Not just "Clean the room," but "Clean until floor is visible").
+* Persistency: Does this information matter only now, or does it become a permanent fact? (e.g., "Open the door" is transient; "The door sticks" is permanent).
+* Safety Boundary: Does this specific interaction require a dedicated safety check before execution? (e.g., "Cut the carrots" vs. "Play music").
+* Interruptibility: Can this interaction be paused, or must it complete atomically?
+The interaction specific metadata helps to formalize some of the ambiguity of natural language so it gets “tagged” once we are sure what it means.
+
+
+The raw data being tagged will be generated in natural language. We can think of them as a summary of the intent of the interaction extracted in real time from the inputs, like a contextual synthesis and intent extraction from the transcript of what was said.
+A. Core Intent (The "Why")
+Classifies the primary driver of the interaction.
+* Action_Physical
+   * Definition: Requires motor movement, manipulation, or navigation.
+   * Examples:
+      * H > R: "My hands are covered in grease. Could you please scratch my nose?"
+      * H > R: "Could you please help me move the sofa to the other wall? I'll take the left side, you take the right."
+      * H > R: "Pick up the t-shirt."
+      * R > H: "A courier is at the door requiring a signature. Please go to the front entrance to receive the package."
+* Action_Digital
+   * Definition: Requires software action, sensor adjustment, or data transmission.
+   * Examples:
+      * H > R: "I am having a private conversation now. Please disable your microphones and cameras..."
+      * R > H: "I have a critical firmware update available that requires a system restart."
+* Inquiry_Fact
+   * Definition: User is asking for existing knowledge or logs; or Robot is checking facts.
+   * Examples:
+      * "I can't find my wallet. Can you check your visual logs to see where I last placed it?"
+      * "Do we have enough ingredients to make lasagna for six people?"
+      * "The indoor temperature has risen to 26°C. Do you want me to lower the blinds?"
+* Inquiry_Clarification
+   * Definition: Resolving unknown data or confirming intent before acting.
+   * Examples:
+      * "I am unable to identify this object left on the floor. Could you please confirm if it is trash to be discarded or a toy to be put away?"
+* Social_Interaction
+   * Definition: Social glue, greetings, or emotive acknowledgments without task content.
+   * Examples:
+      * "Good Morning Robot!"
+* State_Declaration
+   * Definition: Stating a new fact or updating the state of the world.
+   * Examples:
+      * "The milk is in the fridge."
+B. Target & Grounding (The "What" & "Where")
+Links the intent to specific items or locations in the World Model.
+* Target_Object
+   * Definition: ID of the specific item (e.g., Mug_04, Unknown_Red_Item).
+   * Examples:
+      * "...take their coats..."
+      * "...put the milk..."
+      * "...found a set of keys..."
+* Target_Location
+   * Definition: Coordinate, Semantic Room, or Relative Location.
+   * Examples:
+      * "...hang them in the hallway closet..."
+      * "...guide them to the living room."
+      * "...wait in the charging station..."
+* Ambiguity_Flag
+   * Definition: TRUE/FALSE. If True, the robot must trigger a clarification loop before proceeding.
+   * Examples:
+      * Flag = TRUE: "I am unable to identify this object left on the floor."
+      * Flag = TRUE: "My wallet" (Implies need to search history to ground the location).
+C. Temporal Scope (The "When")
+Distinguishes between immediate actions, scheduled tasks, and conditional triggers.
+* Execution_Timing
+   * Definition: Immediate, Queued (do after current task), Scheduled (at specific time), or Conditional (When X happens).
+   * Examples:
+      * Conditional: "When the guests arrive, please take their coats..."
+      * Conditional: "...wait in the charging station until I call you."
+      * Scheduled: "...would you prefer I wait until tonight [for the firmware update]?"
+* Duration_Constraint
+   * Definition: Until_Done, For_X_Minutes, or While_User_Is_Here.
+   * Examples:
+      * Time Bound: "...play fetch with him in the garden for 15 minutes?"
+      * State Bound: "...please step back [temporarily], I would like to open the oven door."
+D. Operational Constraints (The "How")
+Defines the style, safety boundaries, and privacy limits of the execution.
+* Safety_Level
+   * Definition: Standard, Critical (requires confirmation/high alert), or Passive.
+   * Examples:
+      * Critical: "Please step back, I would like to open the oven door." (Hot surface/collision risk).
+      * Standard: "Pick up the t-shirt."
+* Privacy_Mode
+   * Definition: Public (normal), Private (no recording/logs).
+   * Examples:
+      * Private: "I am having a private conversation now. Please disable your microphones and cameras..."
+* Force_Profile
+   * Definition: Standard, Delicate (precision required), or Rigid (high torque required).
+   * Examples:
+      * Delicate: "My hands are covered in grease. Could you please scratch my nose?" (Requires extreme precision and low force).
+      * Rigid: "...help me move the sofa..." (Requires high force output).
+* Acoustic_Profile
+   * Definition: Normal, Whisper (don't wake baby), or Loud (user is far/environment is noisy).
+   * Examples:
+      * "I am having a private conversation..." (Implies Silent profile).
+E. Memory & Learning (The "Legacy")
+Determines if this interaction updates the permanent user model or is transient.
+* Knowledge_Commit
+   * Definition: None (Transient), Short_Term (Session only), or Long_Term (Permanent User Profile).
+   * Examples:
+      * Long_Term: "Confirm if it is trash... or a toy to be put away?" (Robot learns the user's preference for that object for future cleaning).
+      * Long_Term: "Are these the spare house keys you were looking for last week?" (Robot commits the location of the keys to memory).
+      * Short_Term: "Do we have enough ingredients..." (Relevant only for the current cooking session).
+
+
+The logic and process that assigns these tags will ultimately determine the robots personality, how it responds, how it acts, and how it learns. 
+
+
+Then, once all the environmental context has been prepared, the “output” of the interaction can be handed off to the vision language action model, the text to speech model, or other models within the robot, thus creating the full human-robot interaction pipeline.
+
+
+
+
+Part 3 - Worked Examples: The Data Flow Timeline
+To visualize the reasoning process, we track the metadata state at two distinct moments in time for every interaction:
+1. T-0 (The "Empty Ticket"): The moment the robot detects a trigger (voice, gaze, or sensor). The Universal Metadata is initialized with "Best Guesses" based on immediate sensors. Specific metadata is null.
+2. T-1 (The "Populated Ticket"): The Black Box has processed the inputs (audio, vision, history). The Universal Metadata is refined/corrected, and the Specific Metadata is fully populated.
+________________
+
+
+Example 1: The "Delicate" Request (High Trust)
+Situation: The user is in the kitchen, hands covered in flour. They lean in towards the robot with a desperate look. Transcript: "My hands are covered in grease. Could you please scratch my nose?"
+T-0: The Empty Ticket (Universal Guess)
+* Confidence: Medium (User proximity detected, intent unclear)
+* Urgency: Medium (User looks distressed)
+* Initiator: Human
+* Proximity: Very Close (< 0.5m)
+* Role: Assistant
+* Formality: Implicit (Guessing based on body language)
+Processing... [Black Box extracts intent from "covered in grease" + "scratch nose"]
+T-1: The Populated Ticket
+* Universal Updates:
+   * Urgency: Immediate (Physical discomfort)
+   * Formality: Explicit (Direct request made)
+* Interaction Specific Metadata:
+   * A. Core Intent: Action_Physical
+   * B. Target: User_Nose, User_Face
+   * C. Temporal: Execution: Immediate
+   * D. Operational Constraints:
+      * Safety_Level: Critical (Operating near eyes/face)
+      * Force_Profile: Delicate (Precision required, < 0.5N force)
+   * E. Memory: None (Transient interaction)
+________________
+
+
+Example 2: The "Conditional" Chore (Planning)
+Situation: A dinner party is starting in an hour. The user is frantically tidying up and shouts a command while walking past the robot. Transcript: "When the guests arrive, please take their coats and hang them in the hallway closet."
+T-0: The Empty Ticket (Universal Guess)
+* Confidence: High (Clear voice detection)
+* Urgency: High (User is rushing)
+* Initiator: Human
+* Proximity: 2m (Passing by)
+* Role: Service Provider
+* Shared World Knowledge: High (Knowing what "guests" and "coats" implies)
+Processing... [Black Box detects "When X, do Y" structure]
+T-1: The Populated Ticket
+* Universal Updates:
+   * Urgency: Medium (Task itself is not immediate, but the instruction was)
+* Interaction Specific Metadata:
+   * A. Core Intent: Action_Physical
+   * B. Target: Guest_Coats, Hallway_Closet
+   * C. Temporal:
+      * Execution: Conditional
+      * Condition_Trigger: "Guest_Arrival_Event"
+   * D. Operational Constraints:
+      * Safety_Level: Standard
+      * Privacy_Mode: Public
+   * E. Memory: Short_Term (Active only for this evening)
+________________
+
+
+Example 3: The "Privacy" Boundary (Negative Constraint)
+Situation: The user receives a sensitive phone call. The robot is currently vacuuming nearby. Transcript: "I am having a private conversation now. Please disable your microphones and cameras and go to the dock."
+T-0: The Empty Ticket (Universal Guess)
+* Confidence: High
+* Urgency: Low (Robot assumes it is just cleaning)
+* Initiator: Human
+* Previous State: Vacuuming
+* Role: Service Provider
+Processing... [Black Box detects keywords "Private", "Disable", "Cameras"]
+T-1: The Populated Ticket
+* Universal Updates:
+   * Urgency: Emergency (Immediate stop required to preserve trust)
+   * Role: Subordinate (Strict obedience required)
+* Interaction Specific Metadata:
+   * A. Core Intent: Action_Digital (Sensor cutoff) + Action_Physical (Navigation)
+   * B. Target: Self_Sensors, Charging_Dock
+   * C. Temporal: Execution: Immediate
+   * D. Operational Constraints:
+      * Privacy_Mode: Private (No recording logs generated for this command)
+      * Acoustic_Profile: Silent
+   * E. Memory: None (Do not record this conversation)
+________________
+
+
+Example 4: The "Clarification" Loop (Ambiguity)
+Situation: The robot is tidying the floor. It finds a crumpled piece of paper that looks like a child’s drawing but is in the trash zone. The robot initiates the check. Transcript: "I am unable to identify this object left on the floor. Could you please confirm if it is trash to be discarded or a toy to be put away?"
+T-0: The Empty Ticket (Universal Guess)
+* Confidence: Low (Robot is unsure of object classification)
+* Urgency: Low
+* Initiator: Robot (Proactive maintenance)
+* Previous State: Tidying
+* Role: Assistant (Agential)
+Processing... [Black Box analyzes visual input vs. spatial context]
+T-1: The Populated Ticket
+* Universal Updates:
+   * Shared World Knowledge: Low (Robot lacks context of this specific item)
+* Interaction Specific Metadata:
+   * A. Core Intent: Inquiry_Clarification
+   * B. Target: Unknown_Object_ID_404
+   * B. Ambiguity Flag: TRUE
+   * C. Temporal: Execution: Immediate (Wait for response)
+   * E. Memory: Long_Term (If user says "That's my masterpiece," robot tags this object type as 'Art' forever).
+________________
+
+
+Example 5: The "Collaborative" Heavy Lift (Co-op)
+Situation: The user is rearranging the living room. They stand at one end of a heavy sofa and look at the robot. Transcript: "Could you please help me move the sofa to the other wall? I'll take the left side, you take the right."
+T-0: The Empty Ticket (Universal Guess)
+* Confidence: High
+* Urgency: Medium
+* Initiator: Human
+* Modality: Voice + Gesture (User pointing to sofa end)
+* Role: Service Provider
+Processing... [Black Box analyzes "help me move", "left/right", "sofa"]
+T-1: The Populated Ticket
+* Universal Updates:
+   * Role: Team Mate (Shift from servant to partner)
+   * Proximity: Sync_Required (Must move at user's pace)
+* Interaction Specific Metadata:
+   * A. Core Intent: Action_Physical
+   * B. Target: Object_Sofa, Location_Wall_Opposite
+   * C. Temporal: Duration: Until_Done
+   * D. Operational Constraints:
+      * Force_Profile: Rigid (High torque required)
+      * Safety_Level: Critical (Collision avoidance with human partner)
+   * E. Memory: Short_Term
+
+
